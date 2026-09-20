@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Visiting Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #030712;
+            color: #F8FAFC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 24px 16px;
+            background-image: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.08), transparent 40%);
+        }
+        .container {
+            max-width: 440px;
+            width: 100%;
+            margin: auto;
+        }
+        .card {
+            background: linear-gradient(145deg, #051024, #0F2454);
+            border-radius: 28px;
+            padding: 32px 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(56, 189, 248, 0.15);
+            border: 1.5px solid rgba(56, 189, 248, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .sheen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #38BDF8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: #38BDF8;
+            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+        .title-group h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #FFFFFF;
+            line-height: 1.2;
+        }
+        .title-group p.job {
+            font-size: 13px;
+            font-weight: 700;
+            color: #38BDF8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+        .title-group p.company {
+            font-size: 13px;
+            color: #94A3B8;
+            margin-top: 2px;
+        }
+
+        /* Hero Action: Save Contact to Phone */
+        .hero-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .btn-save-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: #FFFFFF;
+            font-weight: 800;
+            font-size: 15px;
+            padding: 16px 20px;
+            border-radius: 18px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        .btn-save-contact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(16, 185, 129, 0.5);
+        }
+        .btn-save-contact:active {
+            transform: translateY(0);
+        }
+
+        /* Quick Contact Bar: Call, WhatsApp, Email, Web */
+        .quick-contact-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .quick-contact-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 6px;
+            border-radius: 16px;
+            color: #F8FAFC;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+        .quick-contact-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #38BDF8;
+            transform: translateY(-2px);
+        }
+        .quick-contact-btn span.icon {
+            font-size: 20px;
+        }
+
+        .bio-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 14px 18px;
+            font-size: 13.5px;
+            color: #CBD5E1;
+            line-height: 1.55;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            text-decoration: none;
+            color: #F1F5F9;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateX(4px);
+        }
+        .contact-icon {
+            font-size: 18px;
+        }
+        .social-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .social-chip {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 20px;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .social-chip:hover {
+            background: #38BDF8;
+            color: #051024;
+            transform: translateY(-2px);
+        }
+        .footer-tag {
+            text-align: center;
+            font-size: 11px;
+            color: #64748B;
+            margin-top: 20px;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card" id="cardContainer">
+            <div class="sheen"></div>
+            
+            <div class="header-row">
+                <div class="avatar" id="avatarInitials">VC</div>
+                <div class="title-group">
+                    <h1 id="cardFullName">Executive Contact</h1>
+                    <p class="job" id="cardJobTitle" style="display: none;"></p>
+                    <p class="company" id="cardCompany" style="display: none;"></p>
+                </div>
+            </div>
+
+            <!-- Hero Actions: 1-Tap Save Contact to Phone & Contact Us Quick Bar -->
+            <div class="hero-actions">
+                <button class="btn-save-contact" id="btnSaveContact" onclick="saveContactToPhone()">
+                    <span style="font-size: 18px;">📥</span>
+                    <span>Save Contact to Phone</span>
+                </button>
+
+                <div class="quick-contact-bar" id="quickContactBar">
+                    <a href="#" id="quickCall" class="quick-contact-btn" style="display: none;">
+                        <span class="icon">📞</span>
+                        <span>Call</span>
+                    </a>
+                    <a href="#" id="quickWhatsApp" target="_blank" class="quick-contact-btn" style="display: none;">
+                        <span class="icon">💬</span>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="#" id="quickEmail" class="quick-contact-btn" style="display: none;">
+                        <span class="icon">✉️</span>
+                        <span>Email</span>
+                    </a>
+                    <a href="#" id="quickWeb" target="_blank" class="quick-contact-btn" style="display: none;">
+                        <span class="icon">🌐</span>
+                        <span>Website</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bio-box" id="cardBio" style="display: none;"></div>
+
+            <div class="contact-list" id="contactList"></div>
+
+            <div class="social-grid" id="socialGrid" style="display: none;"></div>
+
+            <div class="footer-tag">QR Code Studio • Digital Visiting Card</div>
+        </div>
+    </div>
+
+    <script>
+        // Template Palette Definitions
+        const TEMPLATES = {
+            "modern_tech": {
+                bg: "linear-gradient(145deg, #051024, #0F2454)",
+                accent: "#38BDF8",
+                border: "rgba(56, 189, 248, 0.4)",
+                shadow: "rgba(56, 189, 248, 0.15)"
+            },
+            "cyber_neon": {
+                bg: "linear-gradient(145deg, #060714, #121332)",
+                accent: "#A855F7",
+                border: "rgba(168, 85, 247, 0.4)",
+                shadow: "rgba(168, 85, 247, 0.15)"
+            },
+            "executive_gold": {
+                bg: "linear-gradient(145deg, #121212, #222222)",
+                accent: "#F59E0B",
+                border: "rgba(245, 158, 11, 0.4)",
+                shadow: "rgba(245, 158, 11, 0.15)"
+            },
+            "emerald_growth": {
+                bg: "linear-gradient(145deg, #021B14, #0A3326)",
+                accent: "#10B981",
+                border: "rgba(168, 85, 129, 0.4)",
+                shadow: "rgba(16, 185, 129, 0.15)"
+            },
+            "crimson_elite": {
+                bg: "linear-gradient(145deg, #1F0407, #380B12)",
+                accent: "#F43F5E",
+                border: "rgba(244, 63, 94, 0.4)",
+                shadow: "rgba(244, 63, 94, 0.15)"
+            },
+            "minimalist_luxe": {
+                bg: "linear-gradient(145deg, #090D16, #161D2F)",
+                accent: "#94A3B8",
+                border: "rgba(148, 163, 184, 0.4)",
+                shadow: "rgba(148, 163, 184, 0.15)"
+            }
+        };
+
+        let currentCard = {
+            fullName: "Executive Contact",
+            jobTitle: "Digital Professional",
+            company: "Enterprise",
+            phoneNumber: "",
+            email: "",
+            website: "",
+            location: "",
+            bio: "",
+            templateId: "modern_tech",
+            socialLinks: []
+        };
+
+        // Decodes base64url safely handling UTF-8
+        function decodeBase64(base64Url) {
+            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            while (base64.length % 4) base64 += '=';
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return new TextDecoder().decode(bytes);
+        }
+
+        function parseCardFromUrl() {
+            try {
+                const hash = window.location.hash.substring(1);
+                const params = new URLSearchParams(hash);
+                const encodedData = params.get('data');
+                if (encodedData) {
+                    const jsonStr = decodeBase64(encodedData);
+                    const parsed = JSON.parse(jsonStr);
+                    currentCard = Object.assign(currentCard, parsed);
+                }
+            } catch (e) {
+                console.warn("Could not parse card from URL hash:", e);
+            }
+        }
+
+        function renderCard() {
+            // Apply template
+            const template = TEMPLATES[currentCard.templateId] || TEMPLATES["modern_tech"];
+            const cardEl = document.getElementById('cardContainer');
+            cardEl.style.background = template.bg;
+            cardEl.style.borderColor = template.border;
+            cardEl.style.boxShadow = `0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px ${template.shadow}`;
+
+            const avatarEl = document.getElementById('avatarInitials');
+            avatarEl.style.borderColor = template.accent;
+            avatarEl.style.color = template.accent;
+
+            // Initials
+            const words = currentCard.fullName.trim().split(/\s+/);
+            const initials = words.slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('') || "VC";
+            avatarEl.innerText = initials;
+
+            // Name
+            document.getElementById('cardFullName').innerText = currentCard.fullName || "Executive Contact";
+            document.title = (currentCard.fullName || "Digital Card") + " - Visiting Card";
+
+            // Job & Company
+            const jobEl = document.getElementById('cardJobTitle');
+            if (currentCard.jobTitle) {
+                jobEl.innerText = currentCard.jobTitle;
+                jobEl.style.color = template.accent;
+                jobEl.style.display = 'block';
+            }
+
+            const compEl = document.getElementById('cardCompany');
+            if (currentCard.company) {
+                compEl.innerText = currentCard.company;
+                compEl.style.display = 'block';
+            }
+
+            // Bio
+            const bioEl = document.getElementById('cardBio');
+            if (currentCard.bio) {
+                bioEl.innerText = currentCard.bio;
+                bioEl.style.display = 'block';
+            }
+
+            // Quick Contact Buttons
+            if (currentCard.phoneNumber) {
+                const callBtn = document.getElementById('quickCall');
+                callBtn.href = 'tel:' + currentCard.phoneNumber;
+                callBtn.style.display = 'flex';
+
+                const waDigits = currentCard.phoneNumber.replace(/[^0-9]/g, '');
+                const waBtn = document.getElementById('quickWhatsApp');
+                waBtn.href = 'https://wa.me/' + waDigits;
+                waBtn.style.display = 'flex';
+            }
+
+            if (currentCard.email) {
+                const emailBtn = document.getElementById('quickEmail');
+                emailBtn.href = 'mailto:' + currentCard.email;
+                emailBtn.style.display = 'flex';
+            }
+
+            if (currentCard.website) {
+                const webBtn = document.getElementById('quickWeb');
+                const url = currentCard.website.startsWith('http') ? currentCard.website : 'https://' + currentCard.website;
+                webBtn.href = url;
+                webBtn.style.display = 'flex';
+            }
+
+            // Contact details list
+            const listEl = document.getElementById('contactList');
+            listEl.innerHTML = '';
+
+            if (currentCard.phoneNumber) {
+                listEl.innerHTML += `
+                    <a href="tel:${currentCard.phoneNumber}" class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <span>${currentCard.phoneNumber}</span>
+                    </a>
+                `;
+            }
+
+            if (currentCard.email) {
+                listEl.innerHTML += `
+                    <a href="mailto:${currentCard.email}" class="contact-item">
+                        <span class="contact-icon">✉️</span>
+                        <span>${currentCard.email}</span>
+                    </a>
+                `;
+            }
+
+            if (currentCard.website) {
+                const url = currentCard.website.startsWith('http') ? currentCard.website : 'https://' + currentCard.website;
+                listEl.innerHTML += `
+                    <a href="${url}" target="_blank" class="contact-item">
+                        <span class="contact-icon">🌐</span>
+                        <span>${currentCard.website}</span>
+                    </a>
+                `;
+            }
+
+            if (currentCard.location) {
+                listEl.innerHTML += `
+                    <div class="contact-item">
+                        <span class="contact-icon">📍</span>
+                        <span>${currentCard.location}</span>
+                    </div>
+                `;
+            }
+
+            // Social links
+            if (currentCard.socialLinks && currentCard.socialLinks.length > 0) {
+                const socialEl = document.getElementById('socialGrid');
+                socialEl.innerHTML = '';
+                currentCard.socialLinks.forEach(link => {
+                    const url = link.formattedUrl || link.rawValue;
+                    const name = link.platform ? link.platform.replace('_', ' ') : 'Link';
+                    socialEl.innerHTML += `
+                        <a href="${url}" target="_blank" class="social-chip">
+                            <span>${name}</span>
+                        </a>
+                    `;
+                });
+                socialEl.style.display = 'flex';
+            }
+        }
+
+        // Generates and downloads the .vcf contact file directly in the mobile browser
+        function saveContactToPhone() {
+            let vcard = "BEGIN:VCARD\nVERSION:3.0\n";
+            if (currentCard.fullName) vcard += `FN:${currentCard.fullName}\n`;
+            if (currentCard.company) vcard += `ORG:${currentCard.company}\n`;
+            if (currentCard.jobTitle) vcard += `TITLE:${currentCard.jobTitle}\n`;
+            if (currentCard.phoneNumber) vcard += `TEL;TYPE=CELL:${currentCard.phoneNumber}\n`;
+            if (currentCard.email) vcard += `EMAIL;TYPE=INTERNET:${currentCard.email}\n`;
+            if (currentCard.website) vcard += `URL:${currentCard.website}\n`;
+            if (currentCard.location) vcard += `ADR;TYPE=WORK:;;${currentCard.location};;;;\n`;
+            if (currentCard.bio) vcard += `NOTE:${currentCard.bio}\n`;
+            vcard += "END:VCARD";
+
+            const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            const filename = (currentCard.fullName || "contact").trim().replace(/\s+/g, '_') + '.vcf';
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            parseCardFromUrl();
+            renderCard();
+        });
+    </script>
+</body>
+</html>
